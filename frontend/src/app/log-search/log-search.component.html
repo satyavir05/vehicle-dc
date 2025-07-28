@@ -1,0 +1,56 @@
+<!-- Spinner -->
+<div class="spinner-wrapper" *ngIf="loading()">
+  <div class="spinner"></div>
+</div>
+
+<!-- File Upload -->
+<input type="file" #fileInput accept=".txt" [hidden]="true" (change)="onFileSelected($event)" />
+<button class="file-select" (click)="fileInput.click()">Select File</button>
+
+<!-- Search Form -->
+<form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="search-form">
+  <div>
+    <label for="vehicleId">Vehicle ID</label>
+    <input id="vehicleId" type="text" formControlName="vehicleId" />
+  </div>
+  <div>
+    <label for="errorCode">Error Code</label>
+    <input id="errorCode" type="text" formControlName="errorCode" />
+  </div>
+  <div>
+    <label for="fromDate">From</label>
+    <input id="fromDate" type="datetime-local" formControlName="fromDate" />
+  </div>
+  <div>
+    <label for="toDate">To</label>
+    <input id="toDate" type="datetime-local" formControlName="toDate" />
+  </div>
+  <button type="submit">Search</button>
+</form>
+
+<!-- Log Table -->
+<table *ngIf="paginatedLogs().length > 0">
+  <thead>
+    <tr>
+      <th>Vehicle ID</th>
+      <th>Error Code</th>
+      <th>Message</th>
+      <th>Timestamp</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let log of paginatedLogs()">
+      <td>{{ log.vehicleId }}</td>
+      <td>{{ log.code }}</td>
+      <td>{{ log.message }}</td>
+      <td>{{ log.timestamp | date: 'medium' }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Pagination Controls -->
+<div class="pagination-controls" *ngIf="totalPages() > 1">
+  <button (click)="prevPage()" [disabled]="currentPage() === 1">Previous</button>
+  <span>Page {{ currentPage() }} of {{ totalPages() }}</span>
+  <button (click)="nextPage()" [disabled]="currentPage() === totalPages()">Next</button>
+</div>
